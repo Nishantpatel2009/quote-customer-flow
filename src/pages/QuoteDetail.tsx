@@ -225,6 +225,13 @@ const QuoteDetail = () => {
               <Button
                 variant="outline"
                 className="w-full"
+                onClick={() => window.open(`/api/pdf/${quoteId}`, "_blank")}
+              >
+                📄 Download PDF
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
                 onClick={() => navigate(`/customer/${quote.customer_id}`)}
               >
                 <X className="w-4 h-4 mr-2" />
