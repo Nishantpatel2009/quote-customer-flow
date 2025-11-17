@@ -225,7 +225,7 @@ const QuoteDetail = () => {
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => window.open(`/api/pdf/${quoteId}`, "_blank")}
+                onClick={() => window.open(`https://ndkvtjdtwnkqfpixfxda.supabase.co/functions/v1/generate-pdf/${quoteId}`, "_blank")}
               >
                 📄 Download PDF
               </Button>
