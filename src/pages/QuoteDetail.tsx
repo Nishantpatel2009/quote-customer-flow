@@ -114,15 +114,8 @@ const QuoteDetail = () => {
 
   const handleDownloadPDF = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
       const response = await fetch(
-        `https://ndkvtjdtwnkqfpixfxda.supabase.co/functions/v1/pdf/${quoteId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${session?.access_token || ''}`,
-          },
-        }
+        `https://ndkvtjdtwnkqfpixfxda.supabase.co/functions/v1/pdf/${quoteId}`
       );
 
       if (!response.ok) {
