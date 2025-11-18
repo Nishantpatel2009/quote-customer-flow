@@ -3,6 +3,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
@@ -17,11 +18,12 @@ interface MasterItem {
 interface RoomSectionProps {
   roomName: string;
   items: MasterItem[];
-  selectedItems: Record<string, { selected: boolean; description: string }>;
+  selectedItems: Record<string, { selected: boolean; description: string; quantity: number }>;
   roomEnabled: boolean;
   onToggleRoom: (enabled: boolean) => void;
   onToggleItem: (itemId: string) => void;
   onUpdateDescription: (itemId: string, description: string) => void;
+  onUpdateQuantity: (itemId: string, quantity: number) => void;
 }
 
 const RoomSection = ({
@@ -32,6 +34,7 @@ const RoomSection = ({
   onToggleRoom,
   onToggleItem,
   onUpdateDescription,
+  onUpdateQuantity,
 }: RoomSectionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -77,17 +80,32 @@ const RoomSection = ({
                     </div>
                     
                     {selectedItems[item.id]?.selected && (
-                      <div className="space-y-2 animate-in slide-in-from-top-2">
-                        <Label htmlFor={`desc-${item.id}`} className="text-sm text-muted-foreground">
-                          Description
-                        </Label>
-                        <Textarea
-                          id={`desc-${item.id}`}
-                          value={selectedItems[item.id]?.description || ""}
-                          onChange={(e) => onUpdateDescription(item.id, e.target.value)}
-                          placeholder="Enter item description"
-                          rows={3}
-                        />
+                      <div className="space-y-3 animate-in slide-in-from-top-2">
+                        <div className="space-y-2">
+                          <Label htmlFor={`qty-${item.id}`} className="text-sm text-muted-foreground">
+                            Quantity
+                          </Label>
+                          <Input
+                            id={`qty-${item.id}`}
+                            type="number"
+                            min="1"
+                            value={selectedItems[item.id]?.quantity || 1}
+                            onChange={(e) => onUpdateQuantity(item.id, parseInt(e.target.value) || 1)}
+                            className="w-24"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor={`desc-${item.id}`} className="text-sm text-muted-foreground">
+                            Description
+                          </Label>
+                          <Textarea
+                            id={`desc-${item.id}`}
+                            value={selectedItems[item.id]?.description || ""}
+                            onChange={(e) => onUpdateDescription(item.id, e.target.value)}
+                            placeholder="Enter item description"
+                            rows={3}
+                          />
+                        </div>
                       </div>
                     )}
                   </div>

@@ -78,6 +78,7 @@ export type Database = {
           id: string
           is_selected: boolean
           item_name: string
+          quantity: number
           quote_id: string
           room_name: string
         }
@@ -87,6 +88,7 @@ export type Database = {
           id?: string
           is_selected?: boolean
           item_name: string
+          quantity?: number
           quote_id: string
           room_name: string
         }
@@ -96,6 +98,7 @@ export type Database = {
           id?: string
           is_selected?: boolean
           item_name?: string
+          quantity?: number
           quote_id?: string
           room_name?: string
         }
