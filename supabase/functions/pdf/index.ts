@@ -204,7 +204,7 @@ serve(async (req) => {
       // Items in this room
       for (const item of roomItems as any[]) {
         const itemHeight = item.description ? 35 : 20;
-        addNewPageIfNeeded(itemHeight);
+        addNewPageIfNeeded(itemHeight + 20);
 
         // Item name
         page.drawText(`• ${item.item_name}`, {
@@ -215,20 +215,40 @@ serve(async (req) => {
         });
         yPosition -= 15;
 
-        // Item description
+        // Item description - handle newlines and word wrapping
         if (item.description) {
-          // Wrap long descriptions
-          const descWords = item.description.split(' ');
-          let line = '';
+          const descLines = item.description.split('\n');
           const maxWidth = contentWidth - 30;
 
-          for (const word of descWords) {
-            const testLine = line + word + ' ';
-            const testWidth = regularFont.widthOfTextAtSize(testLine, 9);
-            
-            if (testWidth > maxWidth && line !== '') {
+          for (const line of descLines) {
+            if (!line.trim()) continue;
+
+            const words = line.split(' ');
+            let currentLine = '';
+
+            for (const word of words) {
+              const testLine = currentLine + word + ' ';
+              const testWidth = italicFont.widthOfTextAtSize(testLine, 9);
+              
+              if (testWidth > maxWidth && currentLine !== '') {
+                addNewPageIfNeeded(15);
+                page.drawText(currentLine.trim(), {
+                  x: margin + 30,
+                  y: yPosition,
+                  size: 9,
+                  font: italicFont,
+                  color: rgb(0.4, 0.4, 0.4),
+                });
+                yPosition -= 12;
+                currentLine = word + ' ';
+              } else {
+                currentLine = testLine;
+              }
+            }
+
+            if (currentLine.trim() !== '') {
               addNewPageIfNeeded(15);
-              page.drawText(line.trim(), {
+              page.drawText(currentLine.trim(), {
                 x: margin + 30,
                 y: yPosition,
                 size: 9,
@@ -236,22 +256,7 @@ serve(async (req) => {
                 color: rgb(0.4, 0.4, 0.4),
               });
               yPosition -= 12;
-              line = word + ' ';
-            } else {
-              line = testLine;
             }
-          }
-
-          if (line.trim() !== '') {
-            addNewPageIfNeeded(15);
-            page.drawText(line.trim(), {
-              x: margin + 30,
-              y: yPosition,
-              size: 9,
-              font: italicFont,
-              color: rgb(0.4, 0.4, 0.4),
-            });
-            yPosition -= 12;
           }
         }
 
