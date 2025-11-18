@@ -239,7 +239,11 @@ const QuoteDetail = () => {
                 <Eye className="w-4 h-4 mr-2" />
                 View
               </Button>
-              <Button variant="outline" className="w-full" disabled>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => navigate(`/quote/${quoteId}/edit`)}
+              >
                 <Edit className="w-4 h-4 mr-2" />
                 Edit
               </Button>
