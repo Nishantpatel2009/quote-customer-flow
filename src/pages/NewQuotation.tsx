@@ -22,7 +22,9 @@ const NewQuotation = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [masterItems, setMasterItems] = useState<MasterItem[]>([]);
-  const [selectedItems, setSelectedItems] = useState<Record<string, { selected: boolean; description: string }>>({});
+  const [selectedItems, setSelectedItems] = useState<
+    Record<string, { selected: boolean; description: string; quantity: number }>
+  >({});
   const [roomStates, setRoomStates] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -42,9 +44,9 @@ const NewQuotation = () => {
       setMasterItems(data || []);
       
       // Initialize selected items state
-      const initialState: Record<string, { selected: boolean; description: string }> = {};
+      const initialState: Record<string, { selected: boolean; description: string; quantity: number }> = {};
       data?.forEach(item => {
-        initialState[item.id] = { selected: false, description: item.default_description || "" };
+        initialState[item.id] = { selected: false, description: item.default_description || "", quantity: 1 };
       });
       setSelectedItems(initialState);
     } catch (error) {
@@ -81,6 +83,7 @@ const NewQuotation = () => {
           room_name: item.room_name,
           item_name: item.item_name,
           description: selectedItems[item.id].description,
+          quantity: selectedItems[item.id].quantity || 1,
           is_selected: true,
         }));
 
@@ -130,6 +133,16 @@ const NewQuotation = () => {
     }));
   };
 
+  const updateItemQuantity = (itemId: string, quantity: number) => {
+    setSelectedItems(prev => ({
+      ...prev,
+      [itemId]: {
+        ...prev[itemId],
+        quantity: Math.max(1, quantity),
+      },
+    }));
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
@@ -173,6 +186,7 @@ const NewQuotation = () => {
                   onToggleRoom={(enabled) => setRoomStates(prev => ({ ...prev, [room]: enabled }))}
                   onToggleItem={toggleItemSelection}
                   onUpdateDescription={updateItemDescription}
+                  onUpdateQuantity={updateItemQuantity}
                 />
               );
             })}

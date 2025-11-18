@@ -28,6 +28,7 @@ interface QuoteItem {
   room_name: string;
   item_name: string;
   description: string;
+  quantity: number;
 }
 
 interface Customer {
@@ -212,12 +213,19 @@ const QuoteDetail = () => {
                   <div className="space-y-2 pl-4">
                     {roomItems.map((item) => (
                       <Card key={item.id} className="p-4 bg-muted/20">
-                        <p className="font-medium">{item.item_name}</p>
-                        {item.description && (
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {item.description}
-                          </p>
-                        )}
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <p className="font-medium">{item.item_name}</p>
+                            {item.description && (
+                              <p className="text-sm text-muted-foreground mt-1">
+                                {item.description}
+                              </p>
+                            )}
+                          </div>
+                          <div className="ml-4 text-right">
+                            <p className="text-sm font-semibold">Qty: {item.quantity}</p>
+                          </div>
+                        </div>
                       </Card>
                     ))}
                   </div>

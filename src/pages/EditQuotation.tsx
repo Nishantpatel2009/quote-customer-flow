@@ -33,7 +33,7 @@ const EditQuotation = () => {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [masterItems, setMasterItems] = useState<MasterItem[]>([]);
   const [selectedItems, setSelectedItems] = useState<
-    Record<string, { selected: boolean; description: string }>
+    Record<string, { selected: boolean; description: string; quantity: number }>
   >({});
   const [roomStates, setRoomStates] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
@@ -83,7 +83,7 @@ const EditQuotation = () => {
       if (itemsError) throw itemsError;
 
       // Build selectedItems from existing quote items
-      const selected: Record<string, { selected: boolean; description: string }> = {};
+      const selected: Record<string, { selected: boolean; description: string; quantity: number }> = {};
       const rooms: Record<string, boolean> = {};
 
       itemsData?.forEach((quoteItem) => {
@@ -97,6 +97,7 @@ const EditQuotation = () => {
           selected[masterItem.id] = {
             selected: quoteItem.is_selected,
             description: quoteItem.description || masterItem.default_description || "",
+            quantity: quoteItem.quantity || 1,
           };
 
           if (quoteItem.is_selected) {
@@ -149,6 +150,7 @@ const EditQuotation = () => {
       [itemId]: {
         selected: !prev[itemId]?.selected,
         description: prev[itemId]?.description || item.default_description || "",
+        quantity: prev[itemId]?.quantity || 1,
       },
     }));
   };
@@ -159,6 +161,16 @@ const EditQuotation = () => {
       [itemId]: {
         ...prev[itemId],
         description,
+      },
+    }));
+  };
+
+  const handleUpdateQuantity = (itemId: string, quantity: number) => {
+    setSelectedItems((prev) => ({
+      ...prev,
+      [itemId]: {
+        ...prev[itemId],
+        quantity: Math.max(1, quantity),
       },
     }));
   };
@@ -184,6 +196,7 @@ const EditQuotation = () => {
           room_name: item.room_name,
           item_name: item.item_name,
           description: selectedItems[item.id]?.description || null,
+          quantity: selectedItems[item.id]?.quantity || 1,
           is_selected: true,
         }));
 
@@ -270,6 +283,7 @@ const EditQuotation = () => {
                     onToggleRoom={(enabled) => handleToggleRoom(room, enabled)}
                     onToggleItem={handleToggleItem}
                     onUpdateDescription={handleUpdateDescription}
+                    onUpdateQuantity={handleUpdateQuantity}
                   />
                 );
               })}

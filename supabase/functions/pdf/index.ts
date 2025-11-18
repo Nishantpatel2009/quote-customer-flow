@@ -206,8 +206,9 @@ serve(async (req) => {
         const itemHeight = item.description ? 35 : 20;
         addNewPageIfNeeded(itemHeight + 20);
 
-        // Item name
-        page.drawText(`• ${item.item_name}`, {
+        // Item name with quantity
+        const itemText = `• ${item.item_name} (Qty: ${item.quantity || 1})`;
+        page.drawText(itemText, {
           x: margin + 15,
           y: yPosition,
           size: 10,
