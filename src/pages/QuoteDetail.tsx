@@ -112,6 +112,47 @@ const QuoteDetail = () => {
     }
   };
 
+  const handleDownloadPDF = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      const response = await fetch(
+        `https://ndkvtjdtwnkqfpixfxda.supabase.co/functions/v1/pdf/${quoteId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.access_token || ''}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `quotation-${quoteId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      toast({
+        title: "Success",
+        description: "PDF downloaded successfully",
+      });
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      toast({
+        title: "Error",
+        description: "Failed to download PDF",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
@@ -225,7 +266,7 @@ const QuoteDetail = () => {
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => window.open(`https://ndkvtjdtwnkqfpixfxda.supabase.co/functions/v1/generate-pdf/${quoteId}`, "_blank")}
+                onClick={handleDownloadPDF}
               >
                 📄 Download PDF
               </Button>
