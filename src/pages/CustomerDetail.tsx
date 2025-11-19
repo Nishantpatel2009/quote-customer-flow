@@ -113,7 +113,7 @@ const CustomerDetail = () => {
           <Card className="p-8 shadow-elegant">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Quotations</h2>
-              <Button onClick={() => navigate(`/new-quotation/${customerId}`)}>
+              <Button onClick={() => navigate(`/customer/${customerId}/new-quotation`)}>
                 <Plus className="w-4 h-4 mr-2" />
                 New Quotation
               </Button>

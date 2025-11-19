@@ -10,6 +10,7 @@ import NewQuotation from "./pages/NewQuotation";
 import CustomerDetail from "./pages/CustomerDetail";
 import QuoteDetail from "./pages/QuoteDetail";
 import EditQuotation from "./pages/EditQuotation";
+import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/new-customer" element={<NewCustomer />} />
           <Route path="/existing-customers" element={<ExistingCustomers />} />
+          <Route path="/reports" element={<Reports />} />
           <Route path="/customer/:customerId" element={<CustomerDetail />} />
           <Route path="/customer/:customerId/new-quotation" element={<NewQuotation />} />
           <Route path="/quote/:quoteId" element={<QuoteDetail />} />
